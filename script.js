@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
     createTaskElement(taskText);
+    SaveTaskToStorage(taskText);
   }
 
     // Create a new li element
@@ -34,6 +35,30 @@ document.addEventListener("DOMContentLoaded", function () {
     // Clear the input field
     taskInput.value = "";
     }
+    
+    // Function to save a task to Local Storage
+    function saveTaskToStorage(taskText) {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      tasks.push(taskText);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+
+  // Function to remove a task from Local Storage
+  function removeTaskFromStorage(taskText) {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      const updatedTasks = tasks.filter(function (task) {
+          return task !== taskText;
+      });
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  }
+
+  // Function to load tasks from Local Storage on page load
+  function loadTasks() {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      tasks.forEach(function (task) {
+          createTaskElement(task);
+      });
+  }
 
     // Event listener for the "Add Task" button
     addButton.addEventListener("click", function () {
@@ -45,6 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
         addTask();
       }
     });
+
+    loadTasks();
 
 
     // Event listener for DOMContentLoaded to invoke addTask
